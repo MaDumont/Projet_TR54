@@ -2,6 +2,10 @@ package server;
 
 import java.util.LinkedList;
 
+import Threads.SendServer2RobotsThread;
+import communication.MsgRobot2Server;
+import communication.MsgServer2Robots;
+
 public class Server {
 	
 
@@ -20,6 +24,18 @@ public class Server {
 		//if robot out of zone
 		if(true) {
 			listRobots.removeFirst();
+		}
+		
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new MsgServer2Robots(),5);
+		communicationThread.start();
+
+
+		while(true) {
+			if(! communicationThread.isAlive()) {
+				communicationThread =new SendServer2RobotsThread(new MsgServer2Robots(),5);
+				communicationThread.start();
+
+			}
 		}
 		
 		
