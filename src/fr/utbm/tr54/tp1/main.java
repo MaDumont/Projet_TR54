@@ -12,6 +12,7 @@ public class main {
 	
 	private static MotorsController motors;
 	private static SensorsController sensors;
+	private static Clock clock;
 	private static Strategie  strategie;
 
 	public static void main(String[] args){

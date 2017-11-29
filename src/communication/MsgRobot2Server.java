@@ -23,7 +23,6 @@ public class MsgRobot2Server implements Message {
 		return null;
 	}
 	
-	
 	//GET and SET
 
 	public int getDistance() {
