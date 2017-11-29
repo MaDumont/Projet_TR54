@@ -2,13 +2,13 @@ package communication;
 
 public class MsgRobot2Server implements Message {
 	
-	private int position;
+	private int distance;
 	private float speed;
 	private int idRobot;
 	private float timeStamp;
 	
-	public MsgRobot2Server(int position, float speed, int idRobot, float timeStamp) {
-		this.position=position;
+	public MsgRobot2Server(int distance, float speed, int idRobot, float timeStamp) {
+		this.distance=distance;
 		this.speed=speed;
 		this.idRobot=idRobot;
 		this.timeStamp=timeStamp;
@@ -26,12 +26,12 @@ public class MsgRobot2Server implements Message {
 	
 	//GET and SET
 
-	public int getPosition() {
-		return position;
+	public int getDistance() {
+		return distance;
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
+	public void setDistance(int distance) {
+		this.distance = distance;
 	}
 
 	public float getSpeed() {
