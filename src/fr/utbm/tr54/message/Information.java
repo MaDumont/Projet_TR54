@@ -1,6 +1,6 @@
 package fr.utbm.tr54.message;
 
-public class Information implements Message {
+public class Information {
 	
 	private int IdRobot,orderList;
 	private float newSpeed;
@@ -22,10 +22,9 @@ public class Information implements Message {
 	public float getNewSpeed() {
 		return this.newSpeed;
 	}
-
+	
 	@Override
-	public byte[] getByteMessage() {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return IdRobot + ";" + orderList + ";" + newSpeed;
 	}
 }
