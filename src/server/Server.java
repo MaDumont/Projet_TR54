@@ -27,9 +27,19 @@ public class Server {
 		
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, new Time(50));
 		
-		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+
+		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
 		communicationThread.start();
 		while(true) {
+			
+			
+
+			broadcast = BroadcastManager.getInstance(9999);
+			receiver = BroadcastReceiver.getInstance(8888);
+			
+			Message mes = new ServerRobotMes(clock.getTime(), null);
+
+			broadcast.broadcast(mes.getByteBufferMessage());
 			
 			
 			int indexList = 0;
@@ -49,13 +59,11 @@ public class Server {
 					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
 				}
 	
-			}		
-
-
-
-
+			}
+			
+			
 			if(! communicationThread.isAlive()) {
-				communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+				communicationThread =new SendServer2RobotsThread(new ServerRobotMes(null, null),5);
 				communicationThread.start();
 
 			}
@@ -74,24 +82,6 @@ public class Server {
 		}
 		return -1;
 
-		
-		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
-		communicationThread.start();
-
-		broadcast = BroadcastManager.getInstance(9999);
-		receiver = BroadcastReceiver.getInstance(8888);
-		
-		Message mes = new ServerRobotMes(clock.getTime(), null);
-
-		broadcast.broadcast(mes.getByteBufferMessage());
-		
-		while(true) {
-			if(! communicationThread.isAlive()) {
-				communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
-				communicationThread.start();
-			}
-		}
-		
 		
 	}
 	
