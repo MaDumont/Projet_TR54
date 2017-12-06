@@ -70,6 +70,15 @@ public class Server {
 					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
 				}
 	
+			}		
+
+
+
+
+			if(! communicationThread.isAlive()) {
+				communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+				communicationThread.start();
+
 			}
 
 			//Trie la listRobots par la position physique des robots.
