@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.util.LinkedList;
 
+
 import Threads.SendServer2RobotsThread;
 import fr.utbm.tr54.message.Message;
 import fr.utbm.tr54.message.RobotServerMes;
@@ -21,7 +22,6 @@ public class Server {
 		Clock clock = new Clock();
 		BroadcastManager broadcast;
 		BroadcastReceiver receiver;
-
 
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 		
@@ -61,13 +61,11 @@ public class Server {
 	
 			}
 			
-			
 			if(! communicationThread.isAlive()) {
 				communicationThread =new SendServer2RobotsThread(new ServerRobotMes(null, null),5);
 				communicationThread.start();
 
 			}
-				
 		}
 		
 	}
@@ -81,8 +79,6 @@ public class Server {
 			}
 		}
 		return -1;
-
-		
 	}
 	
 }
