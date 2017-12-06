@@ -20,6 +20,7 @@ public class Server {
 	private final static int TIME_BETWEEN_MESSAGE = 5;
 	private final static int DIST_BETWEEN_LINE_AND_CENTER = 65;
 	private final static int MAX_SPEED_ROBOT = 100;
+
 	
 
 	public static void main(String[] args) throws IOException{
@@ -36,10 +37,8 @@ public class Server {
 		//pas besoin pour vrai seulement temporaire
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, 50);
 
-
-
-		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
-
+		
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(0, null),5);
 		communicationThread.start();
 
 		while(true) {
@@ -73,8 +72,18 @@ public class Server {
 			}
 			
 			
+			
+			//ANALYSE LA SITUATION ET DETERMINE LORDE DES ROBOTS
+			
+			
+			
+			listInformations.add(new Information(100, 2, 5));
+			
+			
+			
 			if(! communicationThread.isAlive()) {
-				communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
+				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
 				communicationThread.start();
 
 			}
