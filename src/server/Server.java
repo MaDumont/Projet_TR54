@@ -39,6 +39,7 @@ public class Server {
 
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
 		communicationThread.start();
+
 		while(true) {
 			
 			broadcast = BroadcastManager.getInstance(9999);
@@ -88,13 +89,14 @@ public class Server {
 				VirtualRobot thisRobot = listRobots.get(i);
 				
 				distBeforeCenter = DIST_BETWEEN_LINE_AND_CENTER-thisRobot.getPhysicalPosition();
-				
+
 				newSpeed = (int)(distBeforeCenter/timeToWaitBeforeCrossCenter);
 				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;
 				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+5;
 				
 				
 				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
+
 			}
 			if(! communicationThread.isAlive()) {
 				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
