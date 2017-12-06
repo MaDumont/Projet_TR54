@@ -17,21 +17,49 @@ public class Server {
 
 	public static void main(String[] args) throws IOException{
 		
-		//put only the id of the robot
-		LinkedList<Robot> listRobots = new LinkedList<>();
 		Clock clock = new Clock();
 		BroadcastManager broadcast;
 		BroadcastReceiver receiver;
 
-		//if connection
-		if(true) {
-			listRobots.add(new Robot());
+
+		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
+		
+		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, new Time(50));
+		while(true) {
+			
+			
+			int indexList = 0;
+			
+			//look if got message
+			if(indexList ==5) {
+				//read the message
+				VirtualRobot robotFromMes = new VirtualRobot(mesReceive.getPhysicalPosition(),mesReceive.getRobotId(),  mesReceive.getSpeed(), mesReceive.getTimestamp());
+				
+				//-1 means that it's not there
+				if((indexList = isRobotInList(listRobots, robotFromMes)) == -1) {
+					listRobots.addLast(robotFromMes);
+				}
+				else {
+					listRobots.get(indexList).setLastTimeStamp(mesReceive.getTimestamp());
+					listRobots.get(indexList).setPhysicalPosition(mesReceive.getPhysicalPosition());
+					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
+				}
+	
+			}
+				
 		}
 		
-		//if robot out of zone
-		if(true) {
-			listRobots.removeFirst();
+	}
+	
+	
+	
+	private static int isRobotInList(LinkedList<VirtualRobot> listRobots, VirtualRobot robotFromMes) {
+		for(int i=0;i<listRobots.size();i++) {
+			if (listRobots.get(i).getID() == robotFromMes.getID()){
+				return i;
+			}
 		}
+		return -1;
 		
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
 		communicationThread.start();
