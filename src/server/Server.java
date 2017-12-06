@@ -96,15 +96,15 @@ public class Server {
 				
 				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
 			}
-						
-			
-			
 			if(! communicationThread.isAlive()) {
 				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
 				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
 				communicationThread.start();
-
+		
 			}
+				
+			
+			
 		}
 		
 	}

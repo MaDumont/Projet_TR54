@@ -11,6 +11,7 @@ public class VirtualRobot {
 	
 	
 	public VirtualRobot(int physicalPosition, int ID, float speed, long timeStamp) {
+
 		this.physicalPosition = physicalPosition;
 		this.ID = ID;
 		this.speed = speed;
@@ -37,6 +38,7 @@ public class VirtualRobot {
 		return lastTimeStamp;
 	}
 	public void setLastTimeStamp(long lastTimeStamp) {
+
 		this.lastTimeStamp = lastTimeStamp;
 	}
 
