@@ -1,11 +1,12 @@
 package Threads;
-import communication.*;
+
+import fr.utbm.tr54.message.RobotServerMes;
 
 public class SendRobot2ServerThread  extends Thread{
-	private MsgRobot2Server message;
+	private RobotServerMes message;
 	private int timeWaiting;
 	
-	public SendRobot2ServerThread(MsgRobot2Server msg, int timeWaiting) {
+	public SendRobot2ServerThread(RobotServerMes msg, int timeWaiting) {
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 	}
@@ -14,7 +15,7 @@ public class SendRobot2ServerThread  extends Thread{
 	public void run() {
 		
 	
-		System.out.println("thread : " + message.getIdRobot());
+		System.out.println("thread : " + message.getRobotId());
 		
 		try {
 			Thread.sleep(timeWaiting);
