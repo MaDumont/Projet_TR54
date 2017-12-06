@@ -24,6 +24,7 @@ public class Server {
 
 	public static void main(String[] args) throws IOException{
 		
+
 		Clock clock = new Clock();
 		BroadcastManager broadcast;
 		BroadcastReceiver receiver;
@@ -38,6 +39,7 @@ public class Server {
 
 
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
+
 		communicationThread.start();
 
 		while(true) {
@@ -105,7 +107,6 @@ public class Server {
 		
 			}
 				
-			
 			
 		}
 		
