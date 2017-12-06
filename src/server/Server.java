@@ -12,6 +12,7 @@ import lejos.network.BroadcastManager;
 import lejos.network.BroadcastReceiver;
 
 
+
 public class Server {
 	
 
@@ -25,6 +26,9 @@ public class Server {
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 		
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, new Time(50));
+		
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+		communicationThread.start();
 		while(true) {
 			
 			
@@ -45,6 +49,15 @@ public class Server {
 					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
 				}
 	
+			}		
+
+
+
+
+			if(! communicationThread.isAlive()) {
+				communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
+				communicationThread.start();
+
 			}
 				
 		}
@@ -60,6 +73,7 @@ public class Server {
 			}
 		}
 		return -1;
+
 		
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
 		communicationThread.start();

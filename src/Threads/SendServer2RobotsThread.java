@@ -6,6 +6,7 @@ public class SendServer2RobotsThread  extends Thread{
 	private int timeWaiting;
 	
 	public SendServer2RobotsThread(ServerRobotMes msg, int timeWaiting) {
+
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 	}
