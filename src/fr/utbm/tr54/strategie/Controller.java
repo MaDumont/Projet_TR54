@@ -1,4 +1,4 @@
-package fr.utbm.tr54.projet;
+package fr.utbm.tr54.strategie;
 
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;

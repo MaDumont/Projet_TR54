@@ -1,4 +1,4 @@
-package fr.utbm.tr54.projet;
+package fr.utbm.tr54.strategie;
 
 public class Projet_main {
 
