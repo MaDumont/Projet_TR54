@@ -7,10 +7,10 @@ public class VirtualRobot {
 	private int ID;
 	private int physicalPosition;
 	private float speed;
-	private Time lastTimeStamp;
+	private long lastTimeStamp;
 	
 	
-	public VirtualRobot(int physicalPosition, int ID, float speed, Time timeStamp) {
+	public VirtualRobot(int physicalPosition, int ID, float speed, long timeStamp) {
 		this.physicalPosition = physicalPosition;
 		this.ID = ID;
 		this.speed = speed;
@@ -33,10 +33,10 @@ public class VirtualRobot {
 	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
-	public Time getLastTimeStamp() {
+	public long getLastTimeStamp() {
 		return lastTimeStamp;
 	}
-	public void setLastTimeStamp(Time lastTimeStamp) {
+	public void setLastTimeStamp(long lastTimeStamp) {
 		this.lastTimeStamp = lastTimeStamp;
 	}
 

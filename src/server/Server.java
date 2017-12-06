@@ -5,16 +5,16 @@ import java.util.LinkedList;
 
 
 import Threads.SendServer2RobotsThread;
-import fr.utbm.tr54.message.Message;
-import fr.utbm.tr54.message.RobotServerMes;
-import fr.utbm.tr54.message.ServerRobotMes;
+import fr.utbm.tr54.message.Information;
+import fr.utbm.tr54.message.*;
 import fr.utbm.tr54.tp1.Clock;
 import lejos.network.BroadcastManager;
 import lejos.network.BroadcastReceiver;
 
 
-
 public class Server {
+	
+	private final static int TIME_BETWEEN_MESSAGE = 5;
 	
 
 	public static void main(String[] args) throws IOException{
@@ -25,8 +25,14 @@ public class Server {
 
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 		
-		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, new Time(50));
+		LinkedList<Information> listInformations = new LinkedList<>();
 		
+		
+		//pas besoin pour vrai seulement temporaire
+		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, 50);
+		
+		
+
 
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
 		communicationThread.start();
@@ -61,14 +67,18 @@ public class Server {
 			}
 			
 			
-			if(! communicationThread.isAlive()) {
-				communicationThread =new SendServer2RobotsThread(new SeverRobotMes(null, null),5);
-				communicationThread.start();
-
-			}
+			
+			//ANALYSE LA SITUATION ET DETERMINE LORDE DES ROBOTS
+			
+			
+			
+			listInformations.add(new Information(100, 2, 5));
+			
+			
 			
 			if(! communicationThread.isAlive()) {
-				communicationThread =new SendServer2RobotsThread(new ServerRobotMes(null, null),5);
+				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
+				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
 				communicationThread.start();
 
 			}
