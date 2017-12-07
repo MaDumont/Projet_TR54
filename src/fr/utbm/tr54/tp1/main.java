@@ -3,23 +3,29 @@ package fr.utbm.tr54.tp1;
 import java.awt.Robot;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import fr.utbm.tr54.strategie.*;
 import lejos.hardware.lcd.LCD;
+import lejos.network.BroadcastListener;
+import lejos.network.BroadcastManager;
+import lejos.network.BroadcastReceiver;
+import lejos.hardware.Button;
 
 public class main {
-
 	
 	private static MotorsController motors;
 	private static SensorsController sensors;
 	private static Clock clock;
 	private static Strategie  strategie;
-
-	public static void main(String[] args){
+	private	static BroadcastManager broadcast;
+	private	static BroadcastReceiver receiver;
+	private static boolean master;
+	
+	public static void main(String[] args) throws IOException{
 
 		motors = new MotorsController();		
 		sensors = new SensorsController();
-
 
 		LCD.clear();
 		LCD.drawChar('S', 1, 1);
@@ -30,7 +36,34 @@ public class main {
 		LCD.drawChar('!', 6, 1);
 		LCD.refresh();
 		
-		strategie = new FollowYourFriend1Point(1,5,5);
+		final int button = Button.waitForAnyPress();
+		
+		if(button == Button.ID_UP) {
+			master = true;
+
+			broadcast = BroadcastManager.getInstance(9999);
+			receiver = BroadcastReceiver.getInstance(8888);
+			
+			broadcast();
+		}
+		else if (button == Button.ID_DOWN) {
+			master = false;
+
+			broadcast = BroadcastManager.getInstance(8888);
+			receiver = BroadcastReceiver.getInstance(9999);
+		}
+		
+		if(!master) {
+			receiver.addListener(new BroadcastListener() {
+
+				@Override
+				public void onBroadcastReceived(ByteBuffer message) {
+					LCD.clear();
+					LCD.drawString("MESSAGE RECEIVED", 0, 2);
+				}
+			});
+		}
+		/*strategie = new FollowYourFriend1Point(1,5,5);
 		voila(1,5,5);
 		
 		strategie = new FollowYourFriend1Point(10,5,5);
@@ -42,16 +75,22 @@ public class main {
 		strategie = new FollowYourFriend1Point(1,5,10);
 		voila(1,5,10);
 		
-		
 		/*strategie = new RobotLeader(8000);
 		leader();*/
 
+	}
+	
+	private static void broadcast() throws IOException {
+		LCD.clear();
+		LCD.drawString("Broadcasting time", 0, 2);
+		byte[] message = new byte[5];
+		ByteBuffer buffer = ByteBuffer.wrap(message);
 		
+		buffer.putFloat((float) 5.5);
+		broadcast.broadcast(buffer);
 		
-
-
-
-
+		LCD.clear();
+		LCD.drawString("BROADCASTING", 0, 2);
 	}
 
 
