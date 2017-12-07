@@ -43,7 +43,14 @@ public class BroadcastReceiver implements AutoCloseable {
 	private BroadcastReceiver(int port) throws IOException {
 		this.channel = DatagramChannel.open();
 		this.socket = channel.socket();
+<<<<<<< HEAD
 		address = new InetSocketAddress(port);
+=======
+		if(port == 8888)
+			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),8888);
+		else if(port == 9999)
+			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),9999);
+>>>>>>> origin/Clock
 		this.socket.bind(address);
 		this.runnable = new BroadcastReceiverRunnable(this);
 		
