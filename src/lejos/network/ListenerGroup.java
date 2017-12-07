@@ -12,7 +12,7 @@ public class ListenerGroup implements BroadcastListener{
 		
 	
 	@Override
-	public void onBroadcastReceived(byte[] message) {
+	public void onBroadcastReceived(ByteBuffer message) {
 		// TODO Auto-generated method stub
 		//val = ByteBuffer.wrap(message).getFloat();
 		available = true;

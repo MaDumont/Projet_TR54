@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 
 /**
  * Singleton class used to send broadcast messages
@@ -18,20 +21,25 @@ public class BroadcastManager implements AutoCloseable {
 	/**
 	 * Gets an instance of the broadcast manager 
 	 * @return the broadcast manager
-	 * @throws SocketException
+	 * @throws IOException 
 	 */
-	public static BroadcastManager getInstance() throws SocketException {
+	public static BroadcastManager getInstance(int port) throws IOException {
 		if(instance == null) {
-			instance = new BroadcastManager();
+			instance = new BroadcastManager(port);
 		}
 		
 		return instance;
 	}
 	
 	private DatagramSocket socket;
+	private DatagramChannel channel;
+	private InetSocketAddress address;
 	
-	private BroadcastManager() throws SocketException {
-		this.socket = new DatagramSocket();
+	private BroadcastManager(int port) throws IOException {
+		this.channel = DatagramChannel.open();
+		this.socket = channel.socket();
+		socket.setBroadcast(true);
+		address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),port);
 	}
 	
 	/**
@@ -46,12 +54,12 @@ public class BroadcastManager implements AutoCloseable {
 	 * @param message the message
 	 * @throws IOException thrown if unable to send the packet
 	 */
-	public void broadcast(byte[] message) throws IOException {
+	public void broadcast(ByteBuffer message) throws SocketException {
 		try {
-			final DatagramPacket datagramPacket = new DatagramPacket(message, message.length, InetAddress.getByName("255.255.255.255"), 8888);
-			
-			this.socket.send(datagramPacket);
-		} catch (UnknownHostException e) {
+			//final DatagramPacket datagramPacket = new DatagramPacket(message, message.length, InetAddress.getByName("255.255.255.255"), 8888);
+			channel.send(message, address);	
+			//this.socket.send(datagramPacket);
+		} catch (IOException e) {
 			//
 		}
 	}
