@@ -11,11 +11,6 @@ import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Singleton class used to receive the broadcast
- * @author Alexandre Lombard
- *
- */
 public class BroadcastReceiver implements AutoCloseable {
 	
 	private static BroadcastReceiver instance = null;
@@ -43,14 +38,7 @@ public class BroadcastReceiver implements AutoCloseable {
 	private BroadcastReceiver(int port) throws IOException {
 		this.channel = DatagramChannel.open();
 		this.socket = channel.socket();
-<<<<<<< HEAD
 		address = new InetSocketAddress(port);
-=======
-		if(port == 8888)
-			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),8888);
-		else if(port == 9999)
-			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),9999);
->>>>>>> origin/Clock
 		this.socket.bind(address);
 		this.runnable = new BroadcastReceiverRunnable(this);
 		
@@ -121,7 +109,6 @@ public class BroadcastReceiver implements AutoCloseable {
 				ByteBuffer data = ByteBuffer.allocate(1024);
 				try {
 					this.broadcastReceiver.getChannel().receive(data);
-					//this.broadcastReceiver.getSocket().receive(packet);
 					this.broadcastReceiver.fireBroadcastReceived(data);
 				} catch (IOException e) {
 					//

@@ -9,7 +9,6 @@ public class ListenerTest implements BroadcastListener{
 	
 	@Override
 	public void onBroadcastReceived(ByteBuffer message) {
-		// TODO Auto-generated method stub
 		//val = ByteBuffer.wrap(message).getFloat();
 		available =true;
 	}

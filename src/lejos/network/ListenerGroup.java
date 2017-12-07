@@ -9,7 +9,6 @@ public class ListenerGroup implements BroadcastListener{
 		
 	private List<Float> vals = new ArrayList<>();
 	private boolean available = false;
-		
 	
 	@Override
 	public void onBroadcastReceived(ByteBuffer message) {

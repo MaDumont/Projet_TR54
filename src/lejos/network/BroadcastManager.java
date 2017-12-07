@@ -38,16 +38,8 @@ public class BroadcastManager implements AutoCloseable {
 	private BroadcastManager(int port) throws IOException {
 		this.channel = DatagramChannel.open();
 		this.socket = channel.socket();
-<<<<<<< HEAD
 		socket.setBroadcast(true);
 		address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),port);
-=======
-
-		if(port == 8888)
-			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),8888);
-		else if(port == 9999)
-			address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),9999);
->>>>>>> origin/Clock
 	}
 	
 	/**
@@ -62,21 +54,12 @@ public class BroadcastManager implements AutoCloseable {
 	 * @param message the message
 	 * @throws IOException thrown if unable to send the packet
 	 */
-<<<<<<< HEAD
 	public void broadcast(ByteBuffer message) throws SocketException {
 		try {
 			//final DatagramPacket datagramPacket = new DatagramPacket(message, message.length, InetAddress.getByName("255.255.255.255"), 8888);
 			channel.send(message, address);	
 			//this.socket.send(datagramPacket);
 		} catch (IOException e) {
-=======
-	public void broadcast(ByteBuffer message) throws IOException {
-		try {
-			//final DatagramPacket datagramPacket = new DatagramPacket(message, message.length, InetAddress.getByName("255.255.255.255"), 8888);
-			channel.send(message, address);
-			//this.socket.send(datagramPacket);
-		} catch (UnknownHostException e) {
->>>>>>> origin/Clock
 			//
 		}
 	}
