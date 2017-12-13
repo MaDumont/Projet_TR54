@@ -4,7 +4,7 @@ import lejos.robotics.Color;
 
 public class Robot {
 	private final int id;
-	private int physicalPosition;
+	private float physicalPosition;
 	private float speed;
 	private MotorManager motor;
 	private SensorManager sensor;
@@ -22,11 +22,11 @@ public class Robot {
 		return id;
 	}
 
-	public int getPhysicalPosition() {
+	public float getPhysicalPosition() {
 		return physicalPosition;
 	}
 
-	public void setPhysicalPosition(int physicalPosition) {
+	public void setPhysicalPosition(float physicalPosition) {
 		this.physicalPosition = physicalPosition;
 	}
 
@@ -54,7 +54,7 @@ public class Robot {
 			
 			//Send info to server if in conflict zone	
 			if (isZoneConflict()){
-				
+				setPhysicalPosition(motor.CalculateDistance()/10);
 			}
 			
 			switch (rgb)
@@ -67,16 +67,28 @@ public class Robot {
 				motor.forwardLeft();
 				break;	
 				
-			case Color.ORANGE:
+			case Color.RED:
 				//Zone Conflict
 				setZoneConflict(true);
 				break;
+			case Color.BLUE:
+				//color blue 
+				motor.forward();
+				break;
+				
+			default:
+				motor.forward();
 					
 			}
 			rgb = sensor.captCouleur();
 			//check if the robot is outside the conflict zone
-			
+			if (getPhysicalPosition() >= 67)
+			{
+				setZoneConflict(false);
+			}
 		}
 	}
+	
+	
 	
 }
