@@ -56,9 +56,7 @@ public class BroadcastManager implements AutoCloseable {
 	 */
 	public void broadcast(ByteBuffer message) throws SocketException {
 		try {
-			//final DatagramPacket datagramPacket = new DatagramPacket(message, message.length, InetAddress.getByName("255.255.255.255"), 8888);
 			channel.send(message, address);	
-			//this.socket.send(datagramPacket);
 		} catch (IOException e) {
 			//
 		}

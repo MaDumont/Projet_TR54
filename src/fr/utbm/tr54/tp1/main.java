@@ -41,26 +41,23 @@ public class main {
 		if(button == Button.ID_UP) {
 			master = true;
 
-<<<<<<< HEAD
 			broadcast = BroadcastManager.getInstance(8888);
 			receiver = BroadcastReceiver.getInstance(9999);
-=======
+
 			broadcast = BroadcastManager.getInstance(9999);
 			receiver = BroadcastReceiver.getInstance(8888);
->>>>>>> origin/Clock
 			
 			broadcast();
 		}
 		else if (button == Button.ID_DOWN) {
 			master = false;
 
-<<<<<<< HEAD
 			broadcast = BroadcastManager.getInstance(9999);
 			receiver = BroadcastReceiver.getInstance(8888);
-=======
+
 			broadcast = BroadcastManager.getInstance(8888);
 			receiver = BroadcastReceiver.getInstance(9999);
->>>>>>> origin/Clock
+
 		}
 		
 		if(!master) {
@@ -69,12 +66,12 @@ public class main {
 				@Override
 				public void onBroadcastReceived(ByteBuffer message) {
 					LCD.clear();
-<<<<<<< HEAD
+
 					LCD.drawString("MESSAGE RECEIVED", 2, 2);
 					LCD.refresh();
-=======
+
 					LCD.drawString("MESSAGE RECEIVED", 0, 2);
->>>>>>> origin/Clock
+
 				}
 			});
 		}
@@ -97,11 +94,11 @@ public class main {
 	
 	private static void broadcast() throws IOException {
 		LCD.clear();
-<<<<<<< HEAD
+
 		LCD.refresh();
-=======
+
 		LCD.drawString("Broadcasting time", 0, 2);
->>>>>>> origin/Clock
+
 		byte[] message = new byte[5];
 		ByteBuffer buffer = ByteBuffer.wrap(message);
 		
