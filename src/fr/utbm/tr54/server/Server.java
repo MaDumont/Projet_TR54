@@ -1,4 +1,4 @@
-package server;
+package fr.utbm.tr54.server;
 
 import java.io.IOException;
 import java.sql.Time;
@@ -6,14 +6,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-
-import Threads.SendServer2RobotsThread;
-import fr.utbm.tr54.message.Information;
 import fr.utbm.tr54.message.*;
 import fr.utbm.tr54.tp1.Clock;
 import lejos.network.BroadcastManager;
 import lejos.network.BroadcastReceiver;
 
+import fr.utbm.tr54.message.*;
+import fr.utbm.tr54.threads.SendServer2RobotsThread;
+import fr.utbm.tr54.message.*;
 
 public class Server {
 	

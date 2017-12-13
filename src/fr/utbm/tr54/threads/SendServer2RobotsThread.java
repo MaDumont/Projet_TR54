@@ -1,4 +1,4 @@
-package Threads;
+package fr.utbm.tr54.threads;
 import fr.utbm.tr54.message.ServerRobotMes;
 
 public class SendServer2RobotsThread  extends Thread{

@@ -1,4 +1,4 @@
-package server;
+package fr.utbm.tr54.server;
 
 import java.sql.Time;
 
