@@ -1,6 +1,9 @@
 package server;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 
@@ -15,6 +18,8 @@ import lejos.network.BroadcastReceiver;
 public class Server {
 	
 	private final static int TIME_BETWEEN_MESSAGE = 5;
+	private final static int DIST_BETWEEN_LINE_AND_CENTER = 65;
+	private final static int MAX_SPEED_ROBOT = 100;
 	
 
 	public static void main(String[] args) throws IOException{
@@ -24,14 +29,12 @@ public class Server {
 		BroadcastReceiver receiver;
 
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
-		
+
 		LinkedList<Information> listInformations = new LinkedList<>();
-		
 		
 		//pas besoin pour vrai seulement temporaire
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, 50);
-		
-		
+
 
 
 		SendServer2RobotsThread  communicationThread = new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),5);
@@ -47,7 +50,7 @@ public class Server {
 
 			
 			
-			int indexList = 0;
+			int indexList = 5;
 			
 			//look if got message
 			if(indexList ==5) {
@@ -65,15 +68,35 @@ public class Server {
 				}
 	
 			}
-			
-			
+
+			//Trie la listRobots par la position physique des robots.
+			Collections.sort(listRobots, new Comparator<VirtualRobot>() { 
+				@Override 
+				public int compare(VirtualRobot r1, VirtualRobot r2) { 
+					return r1.getPhysicalPosition() - r2.getPhysicalPosition();
+				} 
+			});
 			
 			//ANALYSE LA SITUATION ET DETERMINE LORDE DES ROBOTS
+			float timeToWaitBeforeCrossCenter=0.001f; //en seconde
+			int distBeforeCenter=0; //en centimetre
+			int newSpeed=0; //centimetre par seconde
+			listInformations.clear();
 			
 			
-			
-			listInformations.add(new Information(100, 2, 5));
-			
+			for(int i=0;i<listRobots.size();i++) {
+				VirtualRobot thisRobot = listRobots.get(i);
+				
+				distBeforeCenter = DIST_BETWEEN_LINE_AND_CENTER-thisRobot.getPhysicalPosition();
+				
+				newSpeed = (int)(distBeforeCenter/timeToWaitBeforeCrossCenter);
+				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;
+				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+5;
+				
+				
+				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
+			}
+						
 			
 			
 			if(! communicationThread.isAlive()) {
