@@ -101,7 +101,7 @@ public class Controller {
 			break;	
 				
 			case Color.RED:
-				// black
+				// Orange
 				forward();
 				
 				break;
