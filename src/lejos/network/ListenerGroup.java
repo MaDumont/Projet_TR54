@@ -9,10 +9,9 @@ public class ListenerGroup implements BroadcastListener{
 		
 	private List<Float> vals = new ArrayList<>();
 	private boolean available = false;
-		
 	
 	@Override
-	public void onBroadcastReceived(byte[] message) {
+	public void onBroadcastReceived(ByteBuffer message) {
 		// TODO Auto-generated method stub
 		//val = ByteBuffer.wrap(message).getFloat();
 		available = true;

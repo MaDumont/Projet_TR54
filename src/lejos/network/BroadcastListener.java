@@ -1,5 +1,7 @@
 package lejos.network;
 
+import java.nio.ByteBuffer;
+
 /**
  * Broadcast listener interface
  * @author Alexandre Lombard
@@ -7,7 +9,8 @@ package lejos.network;
 public interface BroadcastListener {
 	/**
 	 * Triggered on broadcast received
-	 * @param message the raw message
+	 * @param data the raw message
 	 */
-	public void onBroadcastReceived(byte[] message);
+	 
+	public void onBroadcastReceived(ByteBuffer data);
 }

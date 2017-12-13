@@ -8,9 +8,8 @@ public class ListenerTest implements BroadcastListener{
 	private boolean available = false;
 	
 	@Override
-	public void onBroadcastReceived(byte[] message) {
-		// TODO Auto-generated method stub
-		val = ByteBuffer.wrap(message).getFloat();
+	public void onBroadcastReceived(ByteBuffer message) {
+		//val = ByteBuffer.wrap(message).getFloat();
 		available =true;
 	}
 	

@@ -3,15 +3,14 @@ package lejos.network;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Singleton class used to receive the broadcast
- * @author Alexandre Lombard
- *
- */
 public class BroadcastReceiver implements AutoCloseable {
 	
 	private static BroadcastReceiver instance = null;
@@ -19,23 +18,28 @@ public class BroadcastReceiver implements AutoCloseable {
 	/**
 	 * Gets an instance of the broadcast receiver 
 	 * @return the broadcast receiver
-	 * @throws SocketException
+	 * @throws IOException 
 	 */
-	public static BroadcastReceiver getInstance() throws SocketException {
+	public static BroadcastReceiver getInstance(int port) throws IOException {
 		if(instance == null) {
-			instance = new BroadcastReceiver();
+			instance = new BroadcastReceiver(port);
 		}
 		
 		return instance;
 	}
 	
 	private DatagramSocket socket;
+	private DatagramChannel channel;
+	private InetSocketAddress address;
 	private List<BroadcastListener> listeners = new ArrayList<>();
 	
 	private BroadcastReceiverRunnable runnable;
 	
-	private BroadcastReceiver() throws SocketException {
-		this.socket = new DatagramSocket(8888);
+	private BroadcastReceiver(int port) throws IOException {
+		this.channel = DatagramChannel.open();
+		this.socket = channel.socket();
+		address = new InetSocketAddress(port);
+		this.socket.bind(address);
 		this.runnable = new BroadcastReceiverRunnable(this);
 		
 		new Thread(this.runnable).start();
@@ -67,11 +71,11 @@ public class BroadcastReceiver implements AutoCloseable {
 	
 	/**
 	 * Fire the broadcast received event
-	 * @param message the raw message received
+	 * @param data the raw message received
 	 */
-	protected void fireBroadcastReceived(byte[] message) {
+	protected void fireBroadcastReceived(ByteBuffer data) {
 		for(BroadcastListener listener : this.listeners) {
-			listener.onBroadcastReceived(message);
+			listener.onBroadcastReceived(data);
 		}
 	}
 	
@@ -81,6 +85,10 @@ public class BroadcastReceiver implements AutoCloseable {
 	 */
 	protected DatagramSocket getSocket() {
 		return this.socket;
+	}
+	
+	protected DatagramChannel getChannel() {
+		return this.channel;
 	}
 	
 	private static class BroadcastReceiverRunnable implements Runnable {
@@ -97,10 +105,11 @@ public class BroadcastReceiver implements AutoCloseable {
 		@Override
 		public void run() {
 			while(!this.stop) {
-				final DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+				//final DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+				ByteBuffer data = ByteBuffer.allocate(1024);
 				try {
-					this.broadcastReceiver.getSocket().receive(packet);
-					this.broadcastReceiver.fireBroadcastReceived(packet.getData());
+					this.broadcastReceiver.getChannel().receive(data);
+					this.broadcastReceiver.fireBroadcastReceived(data);
 				} catch (IOException e) {
 					//
 				}
