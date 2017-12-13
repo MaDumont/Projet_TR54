@@ -1,11 +1,11 @@
 package Threads;
-import fr.utbm.tr54.message.SeverRobotMes;
+import fr.utbm.tr54.message.ServerRobotMes;
 
 public class SendServer2RobotsThread  extends Thread{
-	private SeverRobotMes message;
+	private ServerRobotMes message;
 	private int timeWaiting;
 	
-	public SendServer2RobotsThread(SeverRobotMes msg, int timeWaiting) {
+	public SendServer2RobotsThread(ServerRobotMes msg, int timeWaiting) {
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 	}

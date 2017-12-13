@@ -1,6 +1,5 @@
 package fr.utbm.tr54.tp1;
 
-import java.awt.Robot;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -41,9 +40,6 @@ public class main {
 		if(button == Button.ID_UP) {
 			master = true;
 
-			broadcast = BroadcastManager.getInstance(8888);
-			receiver = BroadcastReceiver.getInstance(9999);
-
 			broadcast = BroadcastManager.getInstance(9999);
 			receiver = BroadcastReceiver.getInstance(8888);
 			
@@ -51,9 +47,6 @@ public class main {
 		}
 		else if (button == Button.ID_DOWN) {
 			master = false;
-
-			broadcast = BroadcastManager.getInstance(9999);
-			receiver = BroadcastReceiver.getInstance(8888);
 
 			broadcast = BroadcastManager.getInstance(8888);
 			receiver = BroadcastReceiver.getInstance(9999);
@@ -174,41 +167,5 @@ public class main {
 			motors.forward();
 		}
 	}
-	/*public void ecrireInformationDistance() throws IOException {
-
-		int distanceObjectInFront;	
-		FileWriter writer = new FileWriter("MaDumont.csv");
-
-		writer.append("Time");
-		writer.append(',');
-		writer.append("3");
-		writer.append(',');
-		writer.append("6");
-		writer.append(',');
-		writer.append("9");
-		writer.append(',');
-		writer.append("12");
-		writer.append("\n");
-		for(int i =0;i<1000;i++) {
-
-			LCD.clear();
-
-			writer.append(i+"");
-			for(int j=3;j<=12;j+=3) {
-
-				distanceObjectInFront = sensors.distance(j);
-				LCD.drawInt(j,2,(int)j/3);
-				LCD.drawInt(distanceObjectInFront,4,j/3);
-				LCD.refresh();
-
-				writer.append(distanceObjectInFront+"");
-				writer.append(',');
-
-
-			}		
-
-		}
-	}*/
-	
 
 }
