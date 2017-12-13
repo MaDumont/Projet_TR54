@@ -3,7 +3,7 @@ package fr.utbm.tr54.tp1;
 public class Clock {
 	private static long initialTime;
 	
-	Clock(){
+	public Clock(){
 		initialTime = System.currentTimeMillis();
 	}
 	

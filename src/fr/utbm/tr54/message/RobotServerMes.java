@@ -1,19 +1,20 @@
 package fr.utbm.tr54.message;
 
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.sql.Time;
 
 public class RobotServerMes implements Message {
 	
 	private int physicalPosition,idRobot;
 	private float speed;
-	private Time timeStamp;
+	private long timeStamp;
 
-	public RobotServerMes(int physicalPosition, int idRobot, float speed, Time timeStamp) {
+	public RobotServerMes(int physicalPosition, int idRobot, float speed, long timeStamp) {
 		this.physicalPosition = physicalPosition;
 		this.idRobot = idRobot;
 		this.speed = speed;
-		this.timeStamp =timeStamp;
+		this.timeStamp = timeStamp;
 	}
 	
 	public int getPhysicalPosition() {
@@ -28,18 +29,25 @@ public class RobotServerMes implements Message {
 		return this.speed;
 	}
 	
-	public Time getTimestamp(){
+	public long getTimestamp(){
 		return this.timeStamp;
 	}
 	
 	@Override
 	public String toString() {
-		return this.physicalPosition + ";" + this.idRobot + ";" + this.speed + ";" + this.timeStamp.getTime();
+		return this.physicalPosition + ";" + this.idRobot + ";" + this.speed + ";" + this.timeStamp;
 	}
 
 	@Override
 	public byte[] getByteMessage() {
 		return this.toString().getBytes();
+	}
+	
+	@Override
+	public ByteBuffer getByteBufferMessage() {
+		ByteBuffer buffer = ByteBuffer.wrap(this.getByteMessage());
+		buffer.put(this.getByteMessage());
+		return buffer;
 	}
 
 	@Override
@@ -47,6 +55,14 @@ public class RobotServerMes implements Message {
 		ByteBuffer b = ByteBuffer.wrap(mes);
 		String str = new String(b.array());
 		return new RobotServerMes(Integer.parseInt(str.split(";")[0]), Integer.parseInt(str.split(";")[1]),
-				Float.parseFloat(str.split(";")[2]), new Time(Long.parseLong(str.split(";")[3])));
+				Float.parseFloat(str.split(";")[2]), Long.parseLong(str.split(";")[3]));
+	}
+
+	@Override
+	public Message generateFromByteBufferMessage(ByteBuffer mes) {
+		byte[] data = new byte[mes.capacity()];
+		((ByteBuffer) mes.duplicate().clear()).get(data);
+		Message message = this.generateFromByteMessage(data);
+		return message;
 	}
 }
