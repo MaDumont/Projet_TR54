@@ -25,21 +25,23 @@ public class Server {
 
 	public static void main(String[] args) throws IOException{
 		
-
 		Clock clock = new Clock();
 		BroadcastManager broadcast;
 		BroadcastReceiver receiver;
 
+
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 
 		LinkedList<Information> listInformations = new LinkedList<>();
-		
+
+
 		//pas besoin pour vrai seulement temporaire
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, 50);
 
 		
 		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(0, null),5);
 		communicationThread.start();
+
 
 		while(true) {
 			
@@ -51,7 +53,7 @@ public class Server {
 			broadcast.broadcast(mes.getByteBufferMessage());
 
 			
-			
+
 			int indexList = 5;
 			
 			//look if got message
@@ -69,23 +71,6 @@ public class Server {
 					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
 				}
 	
-			}
-			
-			
-			
-			//ANALYSE LA SITUATION ET DETERMINE LORDE DES ROBOTS
-			
-			
-			
-			listInformations.add(new Information(100, 2, 5));
-			
-			
-			
-			if(! communicationThread.isAlive()) {
-				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
-				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
-				communicationThread.start();
-
 			}
 
 			//Trie la listRobots par la position physique des robots.
@@ -107,21 +92,31 @@ public class Server {
 				VirtualRobot thisRobot = listRobots.get(i);
 				
 				distBeforeCenter = DIST_BETWEEN_LINE_AND_CENTER-thisRobot.getPhysicalPosition();
-
+				
 				newSpeed = (int)(distBeforeCenter/timeToWaitBeforeCrossCenter);
 				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;
 				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+5;
 				
 				
 				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
-
 			}
+						
+			
+			
 			if(! communicationThread.isAlive()) {
 				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
 				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
 				communicationThread.start();
-		
+
 			}
+
+			//Trie la listRobots par la position physique des robots.
+			Collections.sort(listRobots, new Comparator<VirtualRobot>() { 
+				@Override 
+				public int compare(VirtualRobot r1, VirtualRobot r2) { 
+					return r1.getPhysicalPosition() - r2.getPhysicalPosition();
+				} 
+			});
 				
 			
 		}
