@@ -15,6 +15,10 @@ public class ServerRobotMes implements Message {
 		this.robotsInfo = robotsInfo;
 	}
 	
+	public ServerRobotMes(ByteBuffer mes) {
+		generateFromByteBufferMessage(mes);
+	}
+	
 	public long getTimeStamp(){
 		return this.timeStamp;
 	}

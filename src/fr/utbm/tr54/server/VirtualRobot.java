@@ -5,12 +5,12 @@ import java.sql.Time;
 public class VirtualRobot {
 	
 	private int ID;
-	private int physicalPosition;
+	private float physicalPosition;
 	private float speed;
 	private long lastTimeStamp;
 	
 	
-	public VirtualRobot(int physicalPosition, int ID, float speed, long timeStamp) {
+	public VirtualRobot(float physicalPosition, int ID, float speed, long timeStamp) {
 
 		this.physicalPosition = physicalPosition;
 		this.ID = ID;
@@ -42,11 +42,11 @@ public class VirtualRobot {
 		this.lastTimeStamp = lastTimeStamp;
 	}
 
-	public int getPhysicalPosition() {
+	public float getPhysicalPosition() {
 		return physicalPosition;
 	}
 
-	public void setPhysicalPosition(int physicalPosition) {
+	public void setPhysicalPosition(float physicalPosition) {
 		this.physicalPosition = physicalPosition;
 	}
 	

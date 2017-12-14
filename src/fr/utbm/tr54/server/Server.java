@@ -86,13 +86,13 @@ public class Server {
 			Collections.sort(listRobots, new Comparator<VirtualRobot>() { 
 				@Override 
 				public int compare(VirtualRobot r1, VirtualRobot r2) { 
-					return r1.getPhysicalPosition() - r2.getPhysicalPosition();
+					return (int)(r1.getPhysicalPosition() - r2.getPhysicalPosition());
 				} 
 			});
 			
 			//ANALYSE LA SITUATION ET DETERMINE LORDE DES ROBOTS
 			float timeToWaitBeforeCrossCenter=0.001f; //en seconde
-			int distBeforeCenter=0; //en centimetre
+			float distBeforeCenter=0.0f; //en centimetre
 			int newSpeed=0; //centimetre par seconde
 			listInformations.clear();
 			
