@@ -49,4 +49,16 @@ public class MotorManager {
 		right.rotate(-angleDegre, true);
 		left.rotate(angleDegre);
 	}
+	//compute the distance
+		public float CalculateDistance()
+		{
+					
+			return (float) (Math.PI*DIAMETRE_ROUE*(left.getTachoCount()/360));
+			
+		}
+		public void resetTachometer()
+		{
+			left.resetTachoCount();
+			right.resetTachoCount();
+		}
 }
