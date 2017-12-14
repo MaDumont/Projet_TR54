@@ -30,12 +30,16 @@ public class Server {
 	public static void main(String[] args) throws IOException{
 		
 		Clock clock = new Clock();
-		BroadcastManager broadcast;
-		BroadcastReceiver receiver;
+		BroadcastManager broadcast = BroadcastManager.getInstance(8888);
+		BroadcastReceiver receiver = BroadcastReceiver.getInstance(9999);
 
-	
-		receiver = BroadcastReceiver.getInstance(9999);
-	
+			
+		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
+		LinkedList<Information> listInformations = new LinkedList<>();
+		
+		
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(0, null),5,broadcast);
+		communicationThread.start();
 			
 		receiver.addListener(new BroadcastListener() {
 
@@ -45,29 +49,18 @@ public class Server {
 			}
 		});
 	
-		
-		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 
-		LinkedList<Information> listInformations = new LinkedList<>();
 
 
 		//pas besoin pour vrai seulement temporaire
 		RobotServerMes mesReceive = new RobotServerMes(50, 2, 10.0f, 50);
 
-		
-		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(0, null),5);
-		communicationThread.start();
+
 
 
 		while(true) {
 			
-			broadcast = BroadcastManager.getInstance(9999);
-			receiver = BroadcastReceiver.getInstance(8888);
-			
 			Message mes = new ServerRobotMes(clock.getTime(), null);
-
-			broadcast.broadcast(mes.getByteBufferMessage());
-
 			
 
 			int indexList = 5;
@@ -121,19 +114,11 @@ public class Server {
 			
 			if(! communicationThread.isAlive()) {
 				ServerRobotMes newMes = new ServerRobotMes(0, listInformations);
-				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE);
+				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE,broadcast);
 				communicationThread.start();
 
 			}
-
-			//Trie la listRobots par la position physique des robots.
-			Collections.sort(listRobots, new Comparator<VirtualRobot>() { 
-				@Override 
-				public int compare(VirtualRobot r1, VirtualRobot r2) { 
-					return r1.getPhysicalPosition() - r2.getPhysicalPosition();
-				} 
-			});
-				
+		
 			
 		}
 		
