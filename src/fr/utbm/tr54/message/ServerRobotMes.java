@@ -2,14 +2,15 @@ package fr.utbm.tr54.message;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 public class ServerRobotMes implements Message {
 	
 	private long timeStamp;
-	private List<Information> robotsInfo;
+	private LinkedList<Information> robotsInfo;
 	
-	public ServerRobotMes(long timeStamp, List<Information> robotsInfo){
+	public ServerRobotMes(long timeStamp, LinkedList<Information> robotsInfo){
+
 		this.timeStamp = timeStamp;
 		this.robotsInfo = robotsInfo;
 	}
@@ -18,7 +19,7 @@ public class ServerRobotMes implements Message {
 		return this.timeStamp;
 	}
 
-	public List<Information> getRobotsInfo(){
+	public LinkedList<Information> getRobotsInfo(){
 		return this.robotsInfo;
 	}
 	
@@ -42,7 +43,7 @@ public class ServerRobotMes implements Message {
 		String str = new String(b.array());
 		long timeStamp = Long.parseLong(str.split(":")[0]);
 		str = str.split(":")[1];
-		List<Information> robotsInfo = new ArrayList<Information>();
+		LinkedList<Information> robotsInfo = new LinkedList<Information>();
 		for (String string : str.split("|")) {
 			robotsInfo.add( new Information( Integer.parseInt(string.split(";")[0]), Integer.parseInt(string.split(";")[1]), Float.parseFloat(string.split(";")[2]) ));
 		}
