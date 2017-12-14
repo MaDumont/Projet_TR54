@@ -1,6 +1,7 @@
 package fr.utbm.tr54.server;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.Time;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,6 +14,9 @@ import lejos.network.BroadcastReceiver;
 
 import fr.utbm.tr54.message.*;
 import fr.utbm.tr54.threads.SendServer2RobotsThread;
+import lejos.hardware.lcd.LCD;
+import lejos.network.BroadcastListener;
+import lejos.network.BroadcastReceiver;
 import fr.utbm.tr54.message.*;
 
 public class Server {
@@ -29,7 +33,19 @@ public class Server {
 		BroadcastManager broadcast;
 		BroadcastReceiver receiver;
 
+	
+		receiver = BroadcastReceiver.getInstance(9999);
+	
+			
+		receiver.addListener(new BroadcastListener() {
 
+			@Override
+			public void onBroadcastReceived(ByteBuffer message) {
+
+			}
+		});
+	
+		
 		LinkedList<VirtualRobot> listRobots = new LinkedList<>();	
 
 		LinkedList<Information> listInformations = new LinkedList<>();
