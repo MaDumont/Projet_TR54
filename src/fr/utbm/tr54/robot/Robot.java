@@ -70,6 +70,8 @@ public class Robot {
 			case Color.RED:
 				//Zone Conflict
 				setZoneConflict(true);
+				//reset the tachometer
+				motor.resetTachometer();
 				break;
 			case Color.BLUE:
 				//color blue 

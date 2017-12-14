@@ -56,4 +56,9 @@ public class MotorManager {
 			return (float) (Math.PI*DIAMETRE_ROUE*(left.getTachoCount()/360));
 			
 		}
+		public void resetTachometer()
+		{
+			left.resetTachoCount();
+			right.resetTachoCount();
+		}
 }
