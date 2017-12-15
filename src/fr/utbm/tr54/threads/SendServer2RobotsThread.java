@@ -24,6 +24,7 @@ public class SendServer2RobotsThread  extends Thread{
 	
 	public void run() {
 		try {
+			System.out.println("TABARNACK");
 			broadcast.broadcast(message.getByteBufferMessage());
 			Thread.sleep(timeWaiting*1000);
 		} catch (InterruptedException | SocketException e) {}

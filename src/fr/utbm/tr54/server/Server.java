@@ -13,8 +13,9 @@ import fr.utbm.tr54.threads.SendServer2RobotsThread;
 public class Server {
 	
 	private final static int TIME_BETWEEN_MESSAGE = 5;
+	private final static int TIME_TO_WAIT_BETWEEN_ROBOT = 5;
 	private final static int DIST_BETWEEN_LINE_AND_CENTER = 65;
-	private final static int MAX_SPEED_ROBOT = 100;
+	private final static int MAX_SPEED_ROBOT = 10;  // centimetre par seconde
 	private static boolean asMessages = false;
 	private static RobotServerMes mesReceive = null;
 
@@ -30,9 +31,7 @@ public class Server {
 		
 
 		
-		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),0,broadcast);
-		communicationThread.start();
-					
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),0,broadcast);			
 		
 		receiver.addListener(new BroadcastListener() {
 
@@ -49,7 +48,7 @@ public class Server {
 		while(true) {			
 			
 			//look if got message
-			if(asMessages=true) {
+			if(asMessages==true) {
 				
 				//read the message
 				VirtualRobot robotFromMes = new VirtualRobot(mesReceive.getPhysicalPosition(),mesReceive.getRobotId(),  mesReceive.getSpeed(), mesReceive.getTimestamp());
@@ -89,10 +88,10 @@ public class Server {
 				
 				newSpeed = (int)(distBeforeCenter/timeToWaitBeforeCrossCenter);
 				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;
-				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+5;
+				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+TIME_TO_WAIT_BETWEEN_ROBOT;
 				
 				
-				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
+				listInformations.add(new Information(thisRobot.getID(), i, 0));				
 			}
 						
 			

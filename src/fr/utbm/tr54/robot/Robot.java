@@ -36,40 +36,43 @@ public class Robot {
 
 	
 	public void runOnTrace() throws IOException {		
-		motor.setSpeed((int)this.speed);
-		motor.forward();
+
 		
-		broadcast = BroadcastManager.getInstance(8888);
+		broadcast = BroadcastManager.getInstance(9999);
 		RobotServerMes newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
 		SendRobot2ServerThread  communicationThread =new SendRobot2ServerThread(newMes,0,broadcast);
 		communicationThread.start();
 		
 		
-		/*receiver = BroadcastReceiver.getInstance(9999);		
+		receiver = BroadcastReceiver.getInstance(8888);		
 		receiver.addListener(new BroadcastListener() {
 
 			@Override
 			public void onBroadcastReceived(ByteBuffer message) {
+				System.out.println("BATARD");
 				asReceiveMessage =true;
 				mesReceive = new ServerRobotMes(message);
 			}
-		});*/
-	
+		});
+		
+		motor.setSpeed((int)this.speed);
+		motor.forward();
 		while (true) {
 			
-			
+			setZoneConflict(true);/// c'est seulement pour des tests
 			//must do this before moving
 			//Receive info from server and update parameters			
 			if (isZoneConflict() && asReceiveMessage==true){
+				System.out.println("CRISS");
 				this.clock.syncTime(mesReceive.getTimeStamp());
 				adjustRobotWithInformationInList(mesReceive.getRobotsInfo());				
 			}
 
-			if(sensor.distance() < 10) {
+			if((int)sensor.distance() < 30) {
 				motor.setSpeed(0);
-			}else {
+			}/*else {
 				motor.setSpeed((int)this.speed);
-			}
+			}*/
 			switch (sensor.captCouleur())
 			{			
 			case Color.WHITE:

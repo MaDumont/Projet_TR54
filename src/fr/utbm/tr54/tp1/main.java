@@ -18,7 +18,7 @@ public class main {
 
 	
 	public static void main(String[] args) throws IOException{
-		robot = new Robot(1,0,1000);
+		robot = new Robot(1,0,360);
 		
 		robot.runOnTrace();
 		
