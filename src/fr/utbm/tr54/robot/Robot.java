@@ -1,14 +1,27 @@
 package fr.utbm.tr54.robot;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.LinkedList;
+import fr.utbm.tr54.message.*;
+import fr.utbm.tr54.threads.SendRobot2ServerThread;
+import fr.utbm.tr54.tp1.Clock;
+import lejos.network.*;
 import lejos.robotics.Color;
 
 public class Robot {
+	private static final int SAFE_ZONE_DISTANCE = 80;
 	private final int id;
 	private float physicalPosition;
 	private float speed;
 	private MotorManager motor;
 	private SensorManager sensor;
 	private boolean zoneConflict;
+	private BroadcastManager broadcast;
+	private BroadcastReceiver receiver;
+	private boolean asReceiveMessage;
+	private ServerRobotMes mesReceive;
+	private Clock clock;
 	
 	public Robot(int id, int physicalPosition, float speed){
 		this.id = id;
@@ -16,7 +29,93 @@ public class Robot {
 		this.setSpeed(speed);
 		motor = new MotorManager();
 		sensor = new SensorManager();
+		clock = new Clock();
+		asReceiveMessage = false;
+		mesReceive = null;
 	}
+
+	
+	public void runOnTrace() throws IOException {		
+		
+		
+		broadcast = BroadcastManager.getInstance(8888);
+		RobotServerMes newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
+		SendRobot2ServerThread  communicationThread =new SendRobot2ServerThread(newMes,0,broadcast);
+		communicationThread.start();
+		
+		
+		receiver = BroadcastReceiver.getInstance(9999);		
+		receiver.addListener(new BroadcastListener() {
+
+			@Override
+			public void onBroadcastReceived(ByteBuffer message) {
+				asReceiveMessage =true;
+				mesReceive = new ServerRobotMes(message);
+			}
+		});
+	
+		while (true) {
+			
+			//must do this before moving
+			//Receive info from server and update parameters			
+			if (isZoneConflict() && asReceiveMessage==true){
+				this.clock.syncTime(mesReceive.getTimeStamp());
+				adjustRobotWithInformationInList(mesReceive.getRobotsInfo());				
+			}
+
+			
+			switch (sensor.captCouleur())
+			{			
+			case Color.WHITE:
+				motor.forwardRight();
+				break;
+				
+			case Color.BLACK:
+				motor.forwardLeft();
+				break;	
+				
+			case Color.RED:
+				//Zone Conflict
+				setZoneConflict(true);
+				//reset the tachometer
+				motor.resetTachometer();
+				break;
+			case Color.BLUE:
+				//color blue 
+				motor.forward();
+				break;
+				
+			default:
+				motor.forward();
+					
+			}
+			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE)
+			{
+				setZoneConflict(false);
+			}		
+			
+			//Must do this step after moving
+			if (isZoneConflict()){
+				setPhysicalPosition(motor.CalculateDistance()/10);
+				
+				if(! communicationThread.isAlive()) {
+					newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
+					communicationThread =new SendRobot2ServerThread(newMes,0,broadcast);
+					communicationThread.start();
+
+				}
+			}
+		}
+	}
+	
+	private void adjustRobotWithInformationInList(LinkedList<Information> list) {
+		for(int i =0; i< list.size();i++) {
+			if(list.get(i).getRobotId()==this.id) {
+				this.speed = list.get(i).getNewSpeed();
+			}
+		}
+	}
+	
 
 	public int getId() {
 		return id;
@@ -44,51 +143,6 @@ public class Robot {
 
 	public void setZoneConflict(boolean zoneConflict) {
 		this.zoneConflict = zoneConflict;
-	}
-	
-	public void runOnTrace() {		
-		int rgb = sensor.captCouleur();
-	
-		while (true) {
-			//Receive info from server and update parameters
-			
-			//Send info to server if in conflict zone	
-			if (isZoneConflict()){
-				setPhysicalPosition(motor.CalculateDistance()/10);
-			}
-			
-			switch (rgb)
-			{			
-			case Color.WHITE:
-				motor.forwardRight();
-				break;
-				
-			case Color.BLACK:
-				motor.forwardLeft();
-				break;	
-				
-			case Color.RED:
-				//Zone Conflict
-				setZoneConflict(true);
-				//reset the tachometer
-				motor.resetTachometer();
-				break;
-			case Color.BLUE:
-				//color blue 
-				motor.forward();
-				break;
-				
-			default:
-				motor.forward();
-					
-			}
-			rgb = sensor.captCouleur();
-			//check if the robot is outside the conflict zone
-			if (getPhysicalPosition() >= 67)
-			{
-				setZoneConflict(false);
-			}
-		}
 	}
 	
 	

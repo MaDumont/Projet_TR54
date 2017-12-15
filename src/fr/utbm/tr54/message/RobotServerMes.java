@@ -6,18 +6,19 @@ import java.sql.Time;
 
 public class RobotServerMes implements Message {
 	
-	private int physicalPosition,idRobot;
+	private float physicalPosition;
+	private int idRobot;
 	private float speed;
 	private long timeStamp;
 
-	public RobotServerMes(int physicalPosition, int idRobot, float speed, long timeStamp) {
+	public RobotServerMes(float physicalPosition, int idRobot, float speed, long timeStamp) {
 		this.physicalPosition = physicalPosition;
 		this.idRobot = idRobot;
 		this.speed = speed;
 		this.timeStamp = timeStamp;
 	}
 	
-	public int getPhysicalPosition() {
+	public float getPhysicalPosition() {
 		return this.physicalPosition;
 	}
 	
@@ -54,7 +55,7 @@ public class RobotServerMes implements Message {
 	public Message generateFromByteMessage(byte[] mes) {
 		ByteBuffer b = ByteBuffer.wrap(mes);
 		String str = new String(b.array());
-		return new RobotServerMes(Integer.parseInt(str.split(";")[0]), Integer.parseInt(str.split(";")[1]),
+		return new RobotServerMes(Float.parseFloat(str.split(";")[0]), Integer.parseInt(str.split(";")[1]),
 				Float.parseFloat(str.split(";")[2]), Long.parseLong(str.split(";")[3]));
 	}
 
