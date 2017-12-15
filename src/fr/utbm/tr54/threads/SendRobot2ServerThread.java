@@ -21,10 +21,9 @@ public class SendRobot2ServerThread  extends Thread{
 	
 	public void run() {		
 
-		System.out.println("thread : " + message.getRobotId());		
 		try {
 			broadcast.broadcast(message.getByteBufferMessage());
-			Thread.sleep(timeWaiting);
+			Thread.sleep(timeWaiting*1000);
 		} catch (InterruptedException | SocketException e) {}
 			
 	}
