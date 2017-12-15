@@ -17,6 +17,9 @@ public class RobotServerMes implements Message {
 		this.speed = speed;
 		this.timeStamp = timeStamp;
 	}
+	public RobotServerMes(ByteBuffer mes) {
+		generateFromByteBufferMessage(mes);
+	}
 	
 	public float getPhysicalPosition() {
 		return this.physicalPosition;
