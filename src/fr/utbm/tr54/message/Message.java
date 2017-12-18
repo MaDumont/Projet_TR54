@@ -6,6 +6,6 @@ public interface Message {
 
 	public byte[] getByteMessage();
 	public ByteBuffer getByteBufferMessage();
-	public Message generateFromByteMessage(byte[] mes);
-	public Message generateFromByteBufferMessage(ByteBuffer mes);
+	public void generateFromByteMessage(byte[] mes);
+	public void generateFromByteBufferMessage(ByteBuffer mes);
 }

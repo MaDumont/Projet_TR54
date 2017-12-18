@@ -55,18 +55,18 @@ public class RobotServerMes implements Message {
 	}
 
 	@Override
-	public Message generateFromByteMessage(byte[] mes) {
+	public void generateFromByteMessage(byte[] mes) {
 		ByteBuffer b = ByteBuffer.wrap(mes);
 		String str = new String(b.array());
-		return new RobotServerMes(Float.parseFloat(str.split(";")[0]), Integer.parseInt(str.split(";")[1]),
-				Float.parseFloat(str.split(";")[2]), Long.parseLong(str.split(";")[3]));
+		this.timeStamp = Long.parseLong(str.split(";")[0]);
+		this.idRobot = Integer.parseInt(str.split(";")[1]);
+		this.speed = Float.parseFloat(str.split(";")[2]);
+		this.physicalPosition =Long.parseLong(str.split(";")[3]);
 	}
 
 	@Override
-	public Message generateFromByteBufferMessage(ByteBuffer mes) {
-		byte[] data = new byte[mes.capacity()];
-		((ByteBuffer) mes.duplicate().clear()).get(data);
-		Message message = this.generateFromByteMessage(data);
-		return message;
+	public void generateFromByteBufferMessage(ByteBuffer mes) {
+		byte[] data = mes.array();
+		this.generateFromByteMessage(data);
 	}
 }
