@@ -31,7 +31,7 @@ public class ServerRobotMes implements Message {
 	public String toString() {
 		String str = timeStamp + ":";
 		for (Information information : robotsInfo) {
-			str += information.toString() + "|"; 
+			str += information.toString() + "#"; 
 		}
 		return str;
 	}
@@ -49,7 +49,7 @@ public class ServerRobotMes implements Message {
 		double timeStamp = Double.parseDouble(str.split(":")[0]);
 		str = str.split(":")[1];
 		LinkedList<Information> robotsInfo = new LinkedList<Information>();
-		for (String string : str.split("|")) {
+		for (String string : str.split("#")) {
 			robotsInfo.add( new Information( Integer.parseInt(string.split(";")[0]), Integer.parseInt(string.split(";")[1]), Float.parseFloat(string.split(";")[2]) ));
 		}
 		this.timeStamp = (long)timeStamp;

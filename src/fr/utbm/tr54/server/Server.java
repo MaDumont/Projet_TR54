@@ -94,16 +94,12 @@ public class Server {
 				listInformations.add(new Information(thisRobot.getID(), i, 0));				
 			}
 						
-			
-			
-			/*if(! communicationThread.isAlive()) {
+			if(! communicationThread.isAlive()) {
 				ServerRobotMes newMes = new ServerRobotMes(clock.getTime(), listInformations);
 				communicationThread = new SendServer2RobotsThread(newMes,TIME_BETWEEN_MESSAGE,broadcast);
 				communicationThread.start();
 
-			}*/
-			ServerRobotMes newMes = new ServerRobotMes(clock.getTime(), listInformations);
-			broadcast.broadcast(newMes.getByteBufferMessage());		
+			}	
 			
 		}
 		
