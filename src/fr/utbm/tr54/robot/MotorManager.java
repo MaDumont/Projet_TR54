@@ -14,8 +14,17 @@ public class MotorManager {
 		left = new EV3LargeRegulatedMotor(MotorPort.B);
 		right = new EV3LargeRegulatedMotor(MotorPort.C);
 	}
+	public MotorManager(int  speed){
+		left = new EV3LargeRegulatedMotor(MotorPort.B);
+		right = new EV3LargeRegulatedMotor(MotorPort.C);
+		left.setSpeed(speed);
+		right.setSpeed(speed);
+	}
 	public int getSpeed() {
 		return speed;
+	}
+	public int getMaxSpeed() {
+		return (int)((left.getMaxSpeed()+right.getMaxSpeed())/2);
 	}
 	public void setSpeed(int speed) {
 		this.speed = speed;
@@ -23,20 +32,20 @@ public class MotorManager {
 	void forward() {
 		left.setSpeed(speed);
 		right.setSpeed(speed);
-		left.backward();
-		right.backward();
+		left.forward();
+		right.forward();
 	}
 	void forwardLeft() {
-		left.setSpeed(speed-speed/2);
+		left.setSpeed(speed/10);
 		right.setSpeed(speed);
-		left.backward();
-		right.backward();
+		left.forward();
+		right.forward();
 	}
 	void forwardRight() {
 		left.setSpeed(speed);
-		right.setSpeed(speed-speed/2);
-		left.backward();
-		right.backward();
+		right.setSpeed(speed/10);
+		left.forward();
+		right.forward();
 	}
 	void stop() {
 		left.setSpeed(0);
