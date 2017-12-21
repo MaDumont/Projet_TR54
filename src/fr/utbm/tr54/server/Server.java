@@ -42,26 +42,25 @@ public class Server {
 			}
 		});
 	
-
-
-		
 		while(true) {			
 			
 			//look if got message
 			if(asMessages==true) {
 				
 				//read the message
-				VirtualRobot robotFromMes = new VirtualRobot(mesReceive.getPhysicalPosition(),mesReceive.getRobotId(),  mesReceive.getSpeed(), mesReceive.getTimestamp());
+				if (mesReceive != null){
+					VirtualRobot robotFromMes = new VirtualRobot(mesReceive.getPhysicalPosition(),mesReceive.getRobotId(),  mesReceive.getSpeed(), mesReceive.getTimestamp());
 				
-				int indexList;
-				//-1 means that it's not there
-				if((indexList = isRobotInList(listRobots, robotFromMes)) == -1) {
-					listRobots.addLast(robotFromMes);
-				}
-				else {
-					listRobots.get(indexList).setLastTimeStamp(mesReceive.getTimestamp());
-					listRobots.get(indexList).setPhysicalPosition(mesReceive.getPhysicalPosition());
-					listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
+					int indexList;
+					//-1 means that it's not there
+					if((indexList = isRobotInList(listRobots, robotFromMes)) == -1) {
+						listRobots.addLast(robotFromMes);
+					}
+					else {
+						listRobots.get(indexList).setLastTimeStamp(mesReceive.getTimestamp());
+						listRobots.get(indexList).setPhysicalPosition(mesReceive.getPhysicalPosition());
+						listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
+					}
 				}
 	
 			}

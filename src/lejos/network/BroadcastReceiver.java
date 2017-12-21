@@ -106,9 +106,11 @@ public class BroadcastReceiver implements AutoCloseable {
 		public void run() {
 			while(!this.stop) {
 				//final DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-				ByteBuffer data = ByteBuffer.allocate(1024);
+				ByteBuffer data = ByteBuffer.allocate(8192);
+				data.clear();
 				try {
 					this.broadcastReceiver.getChannel().receive(data);
+					debug = data.array();
 					this.broadcastReceiver.fireBroadcastReceived(data);
 				} catch (IOException e) {
 					//

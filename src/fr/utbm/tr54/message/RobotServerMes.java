@@ -39,7 +39,7 @@ public class RobotServerMes implements Message {
 	
 	@Override
 	public String toString() {
-		return this.physicalPosition + ";" + this.idRobot + ";" + this.speed + ";" + this.timeStamp;
+		return this.timeStamp + ";" + this.idRobot + ";" + this.speed + ";" + this.physicalPosition;
 	}
 
 	@Override
@@ -50,7 +50,6 @@ public class RobotServerMes implements Message {
 	@Override
 	public ByteBuffer getByteBufferMessage() {
 		ByteBuffer buffer = ByteBuffer.wrap(this.getByteMessage());
-		buffer.put(this.getByteMessage());
 		return buffer;
 	}
 
@@ -58,10 +57,10 @@ public class RobotServerMes implements Message {
 	public void generateFromByteMessage(byte[] mes) {
 		ByteBuffer b = ByteBuffer.wrap(mes);
 		String str = new String(b.array());
-		this.timeStamp = Long.parseLong(str.split(";")[0]);
+		this.timeStamp = (long)Long.parseLong((str.split(";")[0]));
 		this.idRobot = Integer.parseInt(str.split(";")[1]);
 		this.speed = Float.parseFloat(str.split(";")[2]);
-		this.physicalPosition =Long.parseLong(str.split(";")[3]);
+		this.physicalPosition = Float.parseFloat(str.split(";")[3]);
 	}
 
 	@Override

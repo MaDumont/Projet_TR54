@@ -15,8 +15,6 @@ public class SendServer2RobotsThread  extends Thread{
 	
 	public SendServer2RobotsThread(ServerRobotMes msg, int timeWaiting, BroadcastManager broadcast) throws IOException {
 
-
-
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 		this.broadcast=broadcast;
