@@ -17,115 +17,111 @@ public class Robot {
 	private float speed;
 	private MotorManager motor;
 	private SensorManager sensor;
-	private boolean zoneConflict;
+	private boolean zoneConflict = false;
 	private BroadcastManager broadcast;
 	private BroadcastReceiver receiver;
-	private boolean asReceiveMessage;
 	private ServerRobotMes mesReceive;
+	private RobotServerMes newMes;
 	private Clock clock;
 	
-	public Robot(int id, int physicalPosition, float speed){
+	public Robot(int id, int physicalPosition, float speed) {
 		this.id = id;
 		this.setPhysicalPosition(physicalPosition);
 		this.setSpeed(speed);
 		motor = new MotorManager();
 		sensor = new SensorManager();
 		clock = new Clock();
-		asReceiveMessage = false;
 		mesReceive = null;
 	}
 
 	
 	public void runOnTrace() throws IOException {		
 
-		
+		//sender
 		broadcast = BroadcastManager.getInstance(9999);
-		RobotServerMes newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
-		SendRobot2ServerThread  communicationThread =new SendRobot2ServerThread(newMes,0,broadcast);
-		communicationThread.start();
-		
-		
+		SendRobot2ServerThread communicationThread = new SendRobot2ServerThread(null, 0, broadcast);
+
+		//listener
 		receiver = BroadcastReceiver.getInstance(8888);		
 		receiver.addListener(new BroadcastListener() {
 
 			@Override
 			public void onBroadcastReceived(ByteBuffer message) {
-	
-				
 				mesReceive = new ServerRobotMes(message);
-				asReceiveMessage =true;
 				if(isZoneConflict()) {
 					clock.syncTime(mesReceive.getTimeStamp());
-					adjustRobotWithInformationInList(mesReceive.getRobotsInfo());
+					for(int i =0; i< mesReceive.getRobotsInfo().size();i++) {
+						if(mesReceive.getRobotsInfo().get(i).getRobotId()== id) {
+							speed = mesReceive.getRobotsInfo().get(i).getNewSpeed();
+						}
+					}
 				}
 			}
 		});
 		
-		motor.setSpeed((int)this.speed);
-		motor.forward();
 		while (true) {
 			
+			if (isZoneConflict()){
+				motor.setSpeed((int)speed);
+				setPhysicalPosition(motor.CalculateDistance()/10);
+				if(! communicationThread.isAlive()) {
+					newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
+					communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
+					communicationThread.start();
+				}
+			}
+			else {
+				motor.setSpeed(motor.getMaxSpeed());
+				motor.forward();
+			}
 			
 			if((int)sensor.distance() < 30) {
 				motor.stop();
 			}
 			else {
-				switch (sensor.captCouleur())
-				{			
-				case Color.WHITE:
-					motor.forwardRight();
-					break;
-					
-				case Color.BLACK:
-					motor.forwardLeft();
-					break;	
-					
-				case Color.RED:
-					//Zone Conflict
-					setZoneConflict(true);
-					//reset the tachometer
-					motor.resetTachometer();
-					break;
-				case Color.BLUE:
-					//color blue 
-					motor.forward();
-					break;
-					
-				default:
-					motor.forward();
+				switch (sensor.captCouleur()) {	
+					case Color.WHITE:
+						motor.forwardRight();
+						break;
 						
+					case Color.BLACK:
+						motor.forwardLeft();
+						break;	
+						
+					case Color.RED:
+						//send message to server to say I am in
+						if(! communicationThread.isAlive()) {
+							newMes = new RobotServerMes(0,this.id,this.speed,this.clock.getTime());
+							communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
+							communicationThread.start();
+						}
+						//Zone Conflict
+						setZoneConflict(true);
+						//reset the tachometer
+						motor.resetTachometer();
+						break;
+					case Color.BLUE:
+						//color blue 
+						motor.forward();
+						break;
+						
+					default:
+						motor.forward();
 				}
 			}
 			
-			
-			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE)
-			{
+			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE) {
 				setZoneConflict(false);
-			}		
-			
-
-			if (isZoneConflict()){
-				setPhysicalPosition(motor.CalculateDistance()/10);
-				
+				//send message to server to say I am outside now
 				if(! communicationThread.isAlive()) {
-					newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
+					newMes = new RobotServerMes(1000000,this.id,this.speed,this.clock.getTime());
 					communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
 					communicationThread.start();
-
 				}
-			}
+			}	
 		}
 	}
 	
-	private void adjustRobotWithInformationInList(LinkedList<Information> list) {
-		for(int i =0; i< list.size();i++) {
-			if(list.get(i).getRobotId()==this.id) {
-				this.speed = list.get(i).getNewSpeed();
-			}
-		}
-	}
-	
-
 	public int getId() {
 		return id;
 	}

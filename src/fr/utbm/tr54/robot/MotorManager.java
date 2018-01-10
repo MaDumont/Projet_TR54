@@ -67,4 +67,7 @@ public class MotorManager {
 		left.resetTachoCount();
 		right.resetTachoCount();
 	}
+	public int getMaxSpeed() {
+		return (int) left.getMaxSpeed();
+	}
 }
