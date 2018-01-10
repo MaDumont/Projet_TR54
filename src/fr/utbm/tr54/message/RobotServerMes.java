@@ -57,6 +57,7 @@ public class RobotServerMes implements Message {
 	public void generateFromByteMessage(byte[] mes) {
 		ByteBuffer b = ByteBuffer.wrap(mes);
 		String str = new String(b.array());
+		System.out.println("RECEVIE: " +str);
 		this.timeStamp = (long)Long.parseLong((str.split(";")[0]));
 		this.idRobot = Integer.parseInt(str.split(";")[1]);
 		this.speed = Float.parseFloat(str.split(";")[2]);

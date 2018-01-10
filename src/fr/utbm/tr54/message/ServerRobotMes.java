@@ -33,6 +33,7 @@ public class ServerRobotMes implements Message {
 		for (Information information : robotsInfo) {
 			str += information.toString() + "#"; 
 		}
+		System.out.println("SEND: " + str);
 		return str;
 	}
 	

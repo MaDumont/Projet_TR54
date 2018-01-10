@@ -30,8 +30,7 @@ public class Server {
 		LinkedList<Information> listInformations = new LinkedList<>();
 		
 
-		
-		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), null),0,broadcast);			
+		SendServer2RobotsThread  communicationThread =new SendServer2RobotsThread(new ServerRobotMes(clock.getTime(), listInformations),0,broadcast);			
 		
 		receiver.addListener(new BroadcastListener() {
 
@@ -55,13 +54,16 @@ public class Server {
 					//-1 means that it's not there
 					if((indexList = isRobotInList(listRobots, robotFromMes)) == -1) {
 						listRobots.addLast(robotFromMes);
+						System.out.println("add new robot");
 					}
 					else {
 						listRobots.get(indexList).setLastTimeStamp(mesReceive.getTimestamp());
 						listRobots.get(indexList).setPhysicalPosition(mesReceive.getPhysicalPosition());
 						listRobots.get(indexList).setSpeed(mesReceive.getSpeed());
+						System.out.println("modify existing robot");
 					}
 				}
+				asMessages=false;
 	
 			}
 

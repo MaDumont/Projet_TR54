@@ -18,7 +18,7 @@ public class SendServer2RobotsThread  extends Thread{
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 		this.broadcast=broadcast;
-		if(message.getRobotsInfo() != null) {				
+		if(!message.getRobotsInfo().isEmpty()) {				
 			sendMessage();
 		}
 	}
