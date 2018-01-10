@@ -39,7 +39,8 @@ public class Robot {
 
 		//sender
 		broadcast = BroadcastManager.getInstance(9999);
-		SendRobot2ServerThread communicationThread = new SendRobot2ServerThread(null, 0, broadcast);
+		RobotServerMes newMes = new RobotServerMes(-1,this.id,this.speed,this.clock.getTime());
+		SendRobot2ServerThread communicationThread = new SendRobot2ServerThread(newMes, 0, broadcast);
 
 		//listener
 		receiver = BroadcastReceiver.getInstance(8888);		
@@ -72,7 +73,6 @@ public class Robot {
 			}
 			else {
 				motor.setSpeed(motor.getMaxSpeed());
-				motor.forward();
 			}
 			
 			if((int)sensor.distance() < 30) {
@@ -99,6 +99,7 @@ public class Robot {
 						setZoneConflict(true);
 						//reset the tachometer
 						motor.resetTachometer();
+						setPhysicalPosition(motor.CalculateDistance()/10);
 						break;
 					case Color.BLUE:
 						//color blue 
@@ -109,8 +110,7 @@ public class Robot {
 						motor.forward();
 				}
 			}
-			
-			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE) {
+			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE && isZoneConflict()){
 				setZoneConflict(false);
 				//send message to server to say I am outside now
 				if(! communicationThread.isAlive()) {
