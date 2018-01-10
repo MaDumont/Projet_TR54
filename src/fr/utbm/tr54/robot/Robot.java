@@ -54,6 +54,10 @@ public class Robot {
 				
 				mesReceive = new ServerRobotMes(message);
 				asReceiveMessage =true;
+				if(isZoneConflict()) {
+					clock.syncTime(mesReceive.getTimeStamp());
+					adjustRobotWithInformationInList(mesReceive.getRobotsInfo());
+				}
 			}
 		});
 		
@@ -61,17 +65,7 @@ public class Robot {
 		motor.forward();
 		while (true) {
 			
-			setZoneConflict(false);/// c'est seulement pour des tests
 			
-			
-			//must do this before moving
-			//Receive info from server and update parameters			
-			if (isZoneConflict() && asReceiveMessage==true){
-				System.out.println("CRISS");
-				this.clock.syncTime(mesReceive.getTimeStamp());
-				adjustRobotWithInformationInList(mesReceive.getRobotsInfo());		
-			}
-
 			if((int)sensor.distance() < 30) {
 				motor.stop();
 			}
@@ -109,9 +103,6 @@ public class Robot {
 				setZoneConflict(false);
 			}		
 			
-			//Must do this step after moving
-			
-			setZoneConflict(false);/// c'est seulement pour des tests
 
 			if (isZoneConflict()){
 				setPhysicalPosition(motor.CalculateDistance()/10);

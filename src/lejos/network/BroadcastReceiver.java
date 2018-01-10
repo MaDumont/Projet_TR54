@@ -110,7 +110,6 @@ public class BroadcastReceiver implements AutoCloseable {
 				data.clear();
 				try {
 					this.broadcastReceiver.getChannel().receive(data);
-					debug = data.array();
 					this.broadcastReceiver.fireBroadcastReceived(data);
 				} catch (IOException e) {
 					//

@@ -39,7 +39,7 @@ public class BroadcastManager implements AutoCloseable {
 		this.channel = DatagramChannel.open();
 		this.socket = channel.socket();
 		socket.setBroadcast(true);
-		address = new InetSocketAddress(InetAddress.getByName("255.255.255.255"),port);
+		address = new InetSocketAddress(InetAddress.getByName("192.168.43.255"),port);
 	}
 	
 	/**

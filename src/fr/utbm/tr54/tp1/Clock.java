@@ -12,6 +12,6 @@ public class Clock {
 	}
 	
 	public void syncTime(long masterTime) {
-		initialTime += masterTime - this.getTime();
+		initialTime = - masterTime +System.currentTimeMillis();
 	}
 }

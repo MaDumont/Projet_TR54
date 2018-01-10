@@ -12,12 +12,12 @@ import fr.utbm.tr54.threads.SendServer2RobotsThread;
 
 public class Server {
 	
-	private final static int TIME_BETWEEN_MESSAGE = 5;
+	private final static int TIME_BETWEEN_MESSAGE = 1;
 	private final static int TIME_TO_WAIT_BETWEEN_ROBOT = 5;
 	private final static int DIST_BETWEEN_LINE_AND_CENTER = 65;
 	private final static int MAX_SPEED_ROBOT = 10;  // centimetre par seconde
 	private static boolean asMessages = false;
-	private static RobotServerMes mesReceive = null;
+	private static RobotServerMes mesReceive = new RobotServerMes(0, 0, 0, 0);
 
 	public static void main(String[] args) throws IOException{
 		
@@ -91,8 +91,8 @@ public class Server {
 				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;
 				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+TIME_TO_WAIT_BETWEEN_ROBOT;
 				
-				
-				listInformations.add(new Information(thisRobot.getID(), i, 0));				
+				newSpeed = newSpeed *360/ ((int)(2*1.5*Math.PI));
+				listInformations.add(new Information(thisRobot.getID(), i, newSpeed));				
 			}
 						
 			if(! communicationThread.isAlive()) {
