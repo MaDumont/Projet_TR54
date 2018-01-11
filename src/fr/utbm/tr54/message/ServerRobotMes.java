@@ -34,7 +34,6 @@ public class ServerRobotMes implements Message {
 			str += information.toString() + "#"; 
 		}
 		str = str.substring(0,str.length()-1);
-		System.out.println("SEND: " + str);
 		return str;
 	}
 	
