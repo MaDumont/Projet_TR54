@@ -25,6 +25,13 @@ public class Robot {
 	private RobotServerMes newMes;
 	private Clock clock;
 	
+	/**
+	 * Constructor of Robot
+	 * 
+	 * @param id				the ID of the robot
+	 * @param physicalPosition	the position of the robot
+	 * @param speed				the speed of the robot
+	 */
 	public Robot(int id, int physicalPosition, float speed) {
 		this.id = id;
 		System.out.println(Integer.toString(id));
@@ -37,6 +44,11 @@ public class Robot {
 	}
 
 	
+	/**
+	 * Main loop of the robot
+	 * 
+	 * @throws IOException
+	 */
 	public void runOnTrace() throws IOException {		
 		boolean asDoneIt =false;
 		//sender
@@ -123,34 +135,55 @@ public class Robot {
 		}
 	}
 	
+	/**
+	 * @return id	the ID of the robot
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @return physicalPosition	the position of the robot
+	 */
 	public float getPhysicalPosition() {
 		return physicalPosition;
 	}
 
+	/**
+	 * @param physicalPosition	the position of the robot
+	 */
 	public void setPhysicalPosition(float physicalPosition) {
 		this.physicalPosition = physicalPosition;
 	}
 
+	/**
+	 * @return speed	the speed of the robot
+	 */
 	public float getSpeed() {
 		return speed;
 	}
 
+	/**
+	 * @param speed		the speed of the robot
+	 */
 	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 	
+	/**
+	 * @return zoneConflict	1: the robot is in the conflict zone
+	 * 						0: the robot is not in the conflict zone
+	 */
 	public boolean isZoneConflict() {
 		return zoneConflict;
 	}
 
+	/**
+	 * @param zoneConflict	1: the robot is in the conflict zone
+	 * 						0: the robot is not in the conflict zone
+	 */
 	public void setZoneConflict(boolean zoneConflict) {
 		this.zoneConflict = zoneConflict;
 	}
-	
-	
 	
 }

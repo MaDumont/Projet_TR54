@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import fr.utbm.tr54.strategie.*;
 import fr.utbm.tr54.robot.*;
 import lejos.hardware.lcd.LCD;
 import lejos.network.BroadcastListener;

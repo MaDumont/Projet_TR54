@@ -13,11 +13,9 @@ import fr.utbm.tr54.threads.SendServer2RobotsThread;
 public class Server {
 	
 	private final static int TIME_BETWEEN_MESSAGE = 1;
-	private final static int TIME_TO_WAIT_BETWEEN_ROBOT = 5;
-	private final static int DIST_BETWEEN_LINE_AND_CENTER = 65;
 	private final static int MAX_SPEED_ROBOT = 360;  // centimetre par seconde
 	private static boolean asMessages = false;
-	private static RobotServerMes mesReceive;// = new RobotServerMes(0, 0, 0, 0);
+	private static RobotServerMes mesReceive;
 
 	public static void main(String[] args) throws IOException{
 		
@@ -74,29 +72,13 @@ public class Server {
 				public int compare(VirtualRobot r1, VirtualRobot r2) { 
 					return (int)(r2.getPhysicalPosition() - r1.getPhysicalPosition());
 				} 
-			});
+			});			
 			
-			//ANALYSE LA SITUATION ET DETERMINE L'ORDE DES ROBOTS
-			float timeToWaitBeforeCrossCenter=0.00000001f; //en seconde
-			float distBeforeCenter=0.0f; //en centimetre
-			int newSpeed=0; //centimetre par seconde
+			int newSpeed;
 			listInformations.clear();
-			
-			
 			for(int i=0;i<listRobots.size();i++) {
 				newSpeed =0;
 				VirtualRobot thisRobot = listRobots.get(i);
-				
-				/*distBeforeCenter = DIST_BETWEEN_LINE_AND_CENTER-thisRobot.getPhysicalPosition();
-				if(i==1) {
-					newSpeed = MAX_SPEED_ROBOT;
-				}else {
-					newSpeed = (int)(distBeforeCenter/timeToWaitBeforeCrossCenter);
-				}
-				timeToWaitBeforeCrossCenter=distBeforeCenter/newSpeed+TIME_TO_WAIT_BETWEEN_ROBOT;
-				
-				newSpeed = newSpeed *360/ ((int)(2*1.5*Math.PI)) ;
-				if(newSpeed>MAX_SPEED_ROBOT) newSpeed=MAX_SPEED_ROBOT;*/
 				
 				newSpeed = (int) thisRobot.getSpeed();
 				
