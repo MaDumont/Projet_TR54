@@ -3,6 +3,7 @@ package fr.utbm.tr54.tp1;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Random;
 
 import fr.utbm.tr54.strategie.*;
 import fr.utbm.tr54.robot.*;
@@ -18,7 +19,9 @@ public class main {
 
 	
 	public static void main(String[] args) throws IOException{
-		robot = new Robot(1,0,360);
+		Random rnd = new Random();
+		int id = rnd.nextInt(1000);
+		robot = new Robot(id,0,360);
 		
 		robot.runOnTrace();
 		

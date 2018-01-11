@@ -7,11 +7,12 @@ import java.util.LinkedList;
 import fr.utbm.tr54.message.*;
 import fr.utbm.tr54.threads.SendRobot2ServerThread;
 import fr.utbm.tr54.tp1.Clock;
+import lejos.hardware.lcd.LCD;
 import lejos.network.*;
 import lejos.robotics.Color;
 
 public class Robot {
-	private static final int SAFE_ZONE_DISTANCE = 80;
+	private static final int SAFE_ZONE_DISTANCE = 100;
 	private final int id;
 	private float physicalPosition;
 	private float speed;
@@ -26,6 +27,7 @@ public class Robot {
 	
 	public Robot(int id, int physicalPosition, float speed) {
 		this.id = id;
+		System.out.println(Integer.toString(id));
 		this.setPhysicalPosition(physicalPosition);
 		this.setSpeed(speed);
 		motor = new MotorManager();
@@ -36,7 +38,7 @@ public class Robot {
 
 	
 	public void runOnTrace() throws IOException {		
-
+		boolean asDoneIt =false;
 		//sender
 		broadcast = BroadcastManager.getInstance(9999);
 		RobotServerMes newMes = new RobotServerMes(-1,this.id,this.speed,this.clock.getTime());
@@ -49,10 +51,10 @@ public class Robot {
 			@Override
 			public void onBroadcastReceived(ByteBuffer message) {
 				mesReceive = new ServerRobotMes(message);
+				clock.syncTime(mesReceive.getTimeStamp());
 				if(isZoneConflict()) {
-					clock.syncTime(mesReceive.getTimeStamp());
 					for(int i =0; i< mesReceive.getRobotsInfo().size();i++) {
-						if(mesReceive.getRobotsInfo().get(i).getRobotId()== id) {
+						if(mesReceive.getRobotsInfo().get(i).getRobotId()== id) {							
 							speed = mesReceive.getRobotsInfo().get(i).getNewSpeed();
 						}
 					}
@@ -65,18 +67,14 @@ public class Robot {
 			if (isZoneConflict()){
 				motor.setSpeed((int)speed);
 				setPhysicalPosition(motor.CalculateDistance()/10);
-				if(! communicationThread.isAlive()) {
-					newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
-					communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
-					communicationThread.start();
-				}
 			}
 			else {
 				motor.setSpeed(motor.getMaxSpeed());
 			}
-			
+			System.out.println(sensor.distance());
 			if((int)sensor.distance() < 30) {
-				motor.stop();
+				while((int)sensor.distance() < 30)
+					motor.stop();
 			}
 			else {
 				switch (sensor.captCouleur()) {	
@@ -89,17 +87,12 @@ public class Robot {
 						break;	
 						
 					case Color.RED:
-						//send message to server to say I am in
-						if(! communicationThread.isAlive()) {
-							newMes = new RobotServerMes(0,this.id,this.speed,this.clock.getTime());
-							communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
-							communicationThread.start();
-						}
 						//Zone Conflict
 						setZoneConflict(true);
 						//reset the tachometer
 						motor.resetTachometer();
 						setPhysicalPosition(motor.CalculateDistance()/10);
+						lejos.hardware.Sound.beepSequenceUp();
 						break;
 					case Color.BLUE:
 						//color blue 
@@ -110,14 +103,22 @@ public class Robot {
 						motor.forward();
 				}
 			}
+			if(getPhysicalPosition() >= 30 && getPhysicalPosition() <= 40 && asDoneIt == false) {
+				setSpeed(0);
+				asDoneIt = true;
+				lejos.hardware.Sound.beepSequenceUp();
+				
+			}
 			if (getPhysicalPosition() >= SAFE_ZONE_DISTANCE && isZoneConflict()){
 				setZoneConflict(false);
+				asDoneIt = false;
 				//send message to server to say I am outside now
-				if(! communicationThread.isAlive()) {
-					newMes = new RobotServerMes(1000000,this.id,this.speed,this.clock.getTime());
-					communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
-					communicationThread.start();
-				}
+				setPhysicalPosition(-1);
+			}
+			if(! communicationThread.isAlive()) {
+				newMes = new RobotServerMes(this.physicalPosition,this.id,this.speed,this.clock.getTime());
+				communicationThread =new SendRobot2ServerThread(newMes,1,broadcast);
+				communicationThread.start();
 			}	
 		}
 	}
