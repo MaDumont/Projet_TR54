@@ -11,12 +11,18 @@ public class SensorManager {
 	private EV3ColorSensor colSens;
 	private SampleProvider s;
 	
+	/**
+	 *  Constructor of SensorManager
+	 */
 	public SensorManager(){
 		usSen = new EV3IRSensor(SensorPort.S2);
 		colSens = new EV3ColorSensor(SensorPort.S3);
 		s = usSen.getDistanceMode();
 	}
 	
+	/**
+	 * @return The distance from the InfraRed Sensor
+	 */
 	float distance() {
 		float range[] = new float[1];
 		SampleProvider s = usSen.getDistanceMode();
@@ -27,6 +33,9 @@ public class SensorManager {
 		return range[0];		     
 	}
 	
+	/**
+	 * @return The Id of the color detected by the ColorSensor
+	 */
 	public int captCouleur() {
 		return colSens.getColorID();
 	}
