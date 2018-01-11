@@ -11,18 +11,30 @@ public class Information {
 		this.newSpeed = newSpeed;
 	}
 	
+	/**
+	 * @return get IdRobot
+	 */
 	public int getRobotId(){
 		return this.IdRobot;
 	}
 	
+	/**
+	 * @return
+	 */
 	public int getListOrder() {
 		return this.orderList;
 	}
 	
+	/**
+	 * @return
+	 */
 	public float getNewSpeed() {
 		return this.newSpeed;
 	}
 	
+	/**
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		return IdRobot + ";" + orderList + ";" + newSpeed;

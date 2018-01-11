@@ -124,6 +124,11 @@ public class Server {
 	
 	
 	
+	/**
+	 * @param listRobots LinkedList of robots
+	 * @param robotFromMes VirtualRobot
+	 * @return the index of the robot in Robots list 
+	 */
 	private static int isRobotInList(LinkedList<VirtualRobot> listRobots, VirtualRobot robotFromMes) {
 		for(int i=0;i<listRobots.size();i++) {
 			if (listRobots.get(i).getID() == robotFromMes.getID()){
