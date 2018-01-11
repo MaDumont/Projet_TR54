@@ -13,6 +13,13 @@ public class SendServer2RobotsThread  extends Thread{
 	private int timeWaiting;
 	private BroadcastManager broadcast;
 	
+	/**
+	 * Thread to send 
+	 * @param msg Message send by server to robots
+	 * @param timeWaiting   the length of time to sleep
+	 * @param broadcast  Broadcast Manager
+	 * @throws IOException exeption 
+	 */
 	public SendServer2RobotsThread(ServerRobotMes msg, int timeWaiting, BroadcastManager broadcast) throws IOException {
 
 		this.message = msg;
@@ -24,6 +31,9 @@ public class SendServer2RobotsThread  extends Thread{
 	}
 	
 	
+	/**
+	 * 
+	 */
 	public void run() {
 		try {
 			Thread.sleep(timeWaiting*100);
@@ -31,6 +41,9 @@ public class SendServer2RobotsThread  extends Thread{
 			
 	}
 	
+	/**
+	 * @throws SocketException
+	 */
 	public void sendMessage() throws SocketException {
 		broadcast.broadcast(message.getByteBufferMessage());
 	

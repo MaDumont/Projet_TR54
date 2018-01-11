@@ -10,6 +10,12 @@ public class VirtualRobot {
 	private long lastTimeStamp;
 	
 	
+	/**
+	 * @param physicalPosition  distance in centimeter 
+	 * @param ID robot's ID
+	 * @param speed value in float 
+	 * @param timeStamp  time to synchronise
+	 */
 	public VirtualRobot(float physicalPosition, int ID, float speed, long timeStamp) {
 
 		this.physicalPosition = physicalPosition;
@@ -21,31 +27,55 @@ public class VirtualRobot {
 	
 	
 	//GET and SET
+	/**
+	 * @return robot's ID
+	 */
 	public int getID() {
 		return ID;
 	}
+	/**
+	 * @param iD robot's ID
+	 */
 	public void setID(int iD) {
 		ID = iD;
 	}
 
+	/**
+	 * @return the robot's speed
+	 */
 	public float getSpeed() {
 		return speed;
 	}
+	/**
+	 * @param speed value in float
+	 */
 	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
+	/**
+	 * @return the last timestamp
+	 */
 	public long getLastTimeStamp() {
 		return lastTimeStamp;
 	}
+	/**
+	 * @param lastTimeStamp last synchronized time
+	 */
 	public void setLastTimeStamp(long lastTimeStamp) {
 
 		this.lastTimeStamp = lastTimeStamp;
 	}
 
+	/**
+	 * @return the distance
+	 */
 	public float getPhysicalPosition() {
 		return physicalPosition;
 	}
 
+	/**
+	 * @param physicalPosition physical position 
+	 */
 	public void setPhysicalPosition(float physicalPosition) {
 		this.physicalPosition = physicalPosition;
 	}
