@@ -31,8 +31,9 @@ public class ServerRobotMes implements Message {
 	public String toString() {
 		String str = timeStamp + ":";
 		for (Information information : robotsInfo) {
-			str += information.toString() + "|"; 
+			str += information.toString() + "#"; 
 		}
+		str = str.substring(0,str.length()-1);
 		return str;
 	}
 	
@@ -42,30 +43,29 @@ public class ServerRobotMes implements Message {
 	}
 	
 	@Override
-	public Message generateFromByteMessage(byte[] mes) {
-		ByteBuffer b = ByteBuffer.wrap(mes);
-		String str = new String(b.array());
-		long timeStamp = Long.parseLong(str.split(":")[0]);
+	public void generateFromByteMessage(byte[] mes) {
+		//getClass().ByteBuffer b = ByteBuffer.wrap(mes);
+		String str = new String(mes);
+		
+		double timeStamp = Double.parseDouble(str.split(":")[0]);
 		str = str.split(":")[1];
 		LinkedList<Information> robotsInfo = new LinkedList<Information>();
-		for (String string : str.split("|")) {
+		for (String string : str.split("#")) {
 			robotsInfo.add( new Information( Integer.parseInt(string.split(";")[0]), Integer.parseInt(string.split(";")[1]), Float.parseFloat(string.split(";")[2]) ));
 		}
-		return new ServerRobotMes(timeStamp,robotsInfo);
+		this.timeStamp = (long)timeStamp;
+		this.robotsInfo = robotsInfo;
 	}
 
 	@Override
 	public ByteBuffer getByteBufferMessage() {
 		ByteBuffer buffer = ByteBuffer.wrap(this.getByteMessage());
-		buffer.put(this.getByteMessage());
 		return buffer;
 	}
 
 	@Override
-	public Message generateFromByteBufferMessage(ByteBuffer mes) {
-		byte[] data = new byte[mes.capacity()];
-		((ByteBuffer) mes.duplicate().clear()).get(data);
-		Message message = this.generateFromByteMessage(data);
-		return message;
+	public void generateFromByteBufferMessage(ByteBuffer mes) {
+		byte[] data = mes.array();
+		this.generateFromByteMessage(data);
 	}
 }

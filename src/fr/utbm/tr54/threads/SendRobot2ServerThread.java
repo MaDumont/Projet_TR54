@@ -16,17 +16,23 @@ public class SendRobot2ServerThread  extends Thread{
 		this.message = msg;
 		this.timeWaiting = timeWaiting;
 		this.broadcast=broadcast;
+		if(message.getRobotId() != 0) {				
+			sendMessage();
+		}
 	}
 	
 	
 	public void run() {		
 
-		System.out.println("thread : " + message.getRobotId());		
 		try {
-			broadcast.broadcast(message.getByteBufferMessage());
-			Thread.sleep(timeWaiting);
-		} catch (InterruptedException | SocketException e) {}
+			Thread.sleep(timeWaiting*100);
+		} catch (InterruptedException e) {}
 			
+	}
+	
+	public void sendMessage() throws SocketException {
+		broadcast.broadcast(message.getByteBufferMessage());
+	
 	}
 
 }
